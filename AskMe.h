@@ -10,15 +10,29 @@ typedef long long ll;
 using namespace std;
 class Question{
 private:
-    string Q, Answer;
+    string text, Answer;
+    int id;
+    int FromId, ToId;
+    vector<Question> Threads;
+    void PrintQuestion();
 public:
     Question();
-    void Enter();
+    string GetText();
+    string GetAnswer();
+    int GetId();
+    void SetAnswer();
+    pair<int, int> GetFromToId();
+    void Print();
+    void Enter(int ,int);
+    void AddThread(Question &);
+
+
+
 
 };
 class User{
 private:
-    string name, password, email;
+    string name, password, email, username;
     int id;
     bool AllowAnonymous;
     vector<Question> QFrom;
@@ -30,6 +44,14 @@ public:
     void PrintQuestionsFromMe();
     void PrintQuestionsToMe();
     bool IsEqual(string, string);
+    void Enter();
+    string GetName();
+    string GetPassword();
+    string GetEmail();
+    string GetUsername();
+    int  GetId();
+    bool GetAnonymous();
+    void Print();
 
 };
 class Ask{
@@ -37,15 +59,19 @@ private:
     User usr;
     vector<User> Users;
     vector<Question> Questions;
-    map<Question, vector<Question>> Thread;
+
     void Menu(int);
     void Login();
     void SignUp();
-    void AskQ();//Done
+    void AskQuestion();//Done
     template<typename t1>
     int SearchId(int id, vector<t1>);
     void PrintFromMe();
     void PrintToMe();
+    void AnswerQuestion();
+    void DeleteQuestion();
+    void  ListUsers();
+    void Feed();
 public:
     Ask();
     void Run();

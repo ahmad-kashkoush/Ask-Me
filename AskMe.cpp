@@ -46,9 +46,9 @@ void Ask::Run() {
                 cin>>choice;
                 if(choice==1)PrintToMe();
                 else if(choice==2)PrintFromMe();
-                else if(choice==3)AnswerQ();
-                else if(choice==4)DeleteQ();
-                else if(choice==5)AskQ();
+                else if(choice==3)AnswerQuestion();
+                else if(choice==4)DeleteQuestion();
+                else if(choice==5)AskQuestion();
                 else if(choice==6)ListUsers();
                 else if(choice==7)Feed();
                 else if(choice==8)
@@ -61,32 +61,31 @@ void Ask::Run() {
 
 }
 
-void Ask::AskQ() {
-        cout<<"Enter User id or -1 to cancel :";
-        int id; cin>>id;
-        int UserIndex=SearchId(id, Users);
-        if(UserIndex==-1){
-            cout<<"Invalid User Id\n";
-            return;
-        }
-        if(Users[UserIndex].AllowAnonymous())
-            cout<<"Note :Anonymous Questions Are not allowed for this user\n";
+void Ask::AskQuestion() {
+    cout<<"Enter User Id or -1 to cancel: ";
+    int id;cin>>id;
+    int UserIndex=SearchId(id, Users);
+    if(UserIndex==-1){
+        cout<<"Invalid User Id...Try Again\n";
+        return;
+    }
+    if(Users[UserIndex].GetAnonymous())
+        cout<<"Note :Anonymous Questions Are not allowed for this user\n";
 
-        cout<<"For Thread Question Enter Question Id or -1 For New Question :";
+    cout<<"For Thread Question Enter Question Id or -1 For New Question :";
         cin>>id;
         Question k;
-        k.Enter();
+        k.Enter(usr.GetId(), Users[UserIndex].GetId());
         if(id==-1) {
             Questions.emplace_back(k);
-            Users[UserIndex].AddQuestion(k);
+            Users[UserIndex].AddQuestionToMe(k);
         } else{
             int QuestionIndex=SearchId(id, Questions);
             if(QuestionIndex==-1){
                 cout<<"Invalid Id\n";
                 return;
             }
-            Users[UserIndex].AddQuestion(k);
-            Thread[Questions[QuestionIndex]].emplace_back(k);
+            Questions[QuestionIndex].AddThread(k);
         }
 
 }
@@ -111,6 +110,43 @@ void Ask::PrintToMe() {
     usr.PrintQuestionsToMe();
 }
 
+void Ask::SignUp() {
+        usr.Enter();
+        Users.emplace_back(usr);
+}
+
+void Ask::AnswerQuestion() {
+        cout<<"Enter Question id or -1 to cancel: ";
+        int id; cin>>id;
+        int QuestionIndex= SearchId(id, Questions);
+        if(QuestionIndex==-1)
+            cout<<"Invalid Question Id\n";
+        else
+            Questions[QuestionIndex].SetAnswer();
+}
+
+void Ask::ListUsers() {
+        for(auto USSR:Users)
+            USSR.Print();
+}
+
+void Ask::Feed() {
+
+}
+
+void Ask::DeleteQuestion() {
+    cout<<"Enter Question id or -1 to cancel : ";
+    int id; cin>>id;
+    int QuestionIndex= SearchId(id, Questions);
+    // Todo     Update it by enabliing to Delete Threads        []
+    if(id==-1){
+        cout<<"Invalid Question Id... Try Again\n";
+        return;
+    }
+    swap(Questions[QuestionIndex], Questions.back());
+    Questions.pop_back();
+}
+
 template<typename t1>
 int Ask::SearchId(int id, vector<t1> t) {
         for(int i=0;i<t.size();i++){
@@ -129,9 +165,7 @@ int Ask::SearchId(int id, vector<t1> t) {
 
 
 // Users
-User::User() {
-
-}
+User::User():id(0), AllowAnonymous(true) {}
 
 void User::AddQuestionFromMe(Question q) {
     QFrom.emplace_back(q);
@@ -143,4 +177,115 @@ void User::AddQuestionToMe(Question q) {
 bool User::IsEqual(string name, string Password) {
     return name==GetName() and Password==GetPassword();
 }
+
+void User::Enter() {
+    cout<<"Enter User Name (No Spaces) :";
+    cin>>username;
+    cout<<"Enter Password :";
+    cin>>password;
+    cout<<"Enter Name :";
+    cin>>name;
+    cout<<"Enter email :";
+    cin>>email;
+    cout<<"Allow Anonymous Questions [1 or 0] :";
+    cin>>AllowAnonymous;
+}
+
+string User::GetName() {
+    return name;
+}
+
+string User::GetPassword() {
+    return password;
+}
+
+string User::GetEmail() {
+    return email;
+}
+
+string User::GetUsername() {
+    return username;
+}
+
+int User::GetId() {
+    return id;
+}
+
+bool User::GetAnonymous() {
+    return AllowAnonymous;
+}
+
+void User::Print() {
+        cout<<"ID: "<<GetId()<<"         Name: "<<GetName()<<el;
+}
+
+void User::PrintQuestionsFromMe() {
+    for(auto i:QFrom)
+        i.Print();
+
+}
+
+void User::PrintQuestionsToMe() {
+        for(auto i:QTo)
+            i.Print();
+}
+
+void Question::SetAnswer() {
+    if(GetAnswer().size()!=0)
+        cout<<"Warning : Alread Answered, answer will be updated\n";
+    cout<<"Enter Answer Text :";
+    getline(cin, Answer);
+
+}
+
+pair<int, int> Question::GetFromToId() {
+    return make_pair(FromId, ToId);
+}
+
+void Question::Enter(int From, int To) {
+        cout<<"Enter Question Text: ";
+         getline(cin, text);
+         FromId=From, ToId=To;
+
+
+}
+
+void Question::PrintQuestion() {
+    int From=GetFromToId().first;
+    string Ft;
+    if(From==-1)Ft=")  !AQ";
+    else        Ft=")  From User ("+ to_string(From)+")";
+
+    cout<<"Question Id ("<<GetId()<<Ft<<
+        " To User("<<GetFromToId().second<<") :    "
+        <<GetText()<<el;
+    cout<<" Answer: "<<GetAnswer()<<el;
+}
+void Question::Print(){
+    PrintQuestion();
+    for(auto i:Threads) {
+        cout<<"Thread :      ";
+        i.PrintQuestion();
+    }
+}
+
+string Question::GetText() {
+    return text;
+}
+
+int Question::GetId() {
+    return id;
+}
+
+string Question::GetAnswer() {
+    return Answer;
+}
+
+void Question::AddThread(Question &Q) {
+    Threads.emplace_back(Q);
+}
+
+Question::Question()
+    :id(0),FromId(-1),ToId(-1), Answer("Not Answered Yet") {}
+
 
