@@ -3,9 +3,9 @@
 //
 
 #include "AskMe.h"
-
 Ask::Ask() {
-
+    Questions=ReadFile("questions.txt");
+    Users=ReadFile("users.txt");
 }
 
 void Ask::Menu(int i) {// i==1?MenuLogin:MenuOfQuestions
@@ -30,14 +30,17 @@ void Ask::Menu(int i) {// i==1?MenuLogin:MenuOfQuestions
 void Ask::Run() {
            int choice=0;
            Menu(1);
-           while(choice!=1 and choice !=2) {
+           int x=-1;
+           while((choice!=1 and choice !=2)||x==-1) {
                cout<<"Enter choice [1-2] : ";
                cin >> choice;
-               if (choice == 1)Login();
+                x=0;
+               if (choice == 1)x=Login();
                else if (choice == 2)SignUp();
                else {
                    cout << "Invalid Choice\n";
                }
+
            }
            Menu(2);
            choice=0;
@@ -90,16 +93,18 @@ void Ask::AskQuestion() {
 
 }
 
-void Ask::Login() {
+int Ask::Login() {
     cout<<"Enter User Name and Password ";
     string name, password;
+    cin>>name>>password;
     for(int i=0;i<Users.size();i++){
         if(Users[i].IsEqual(name, password)){
             usr=Users[i];
-            return;
+            return 0;
         }
     }
     cout<<"Invalid User name and password ... Please Try Again\n";
+    return -1;
 }
 
 void Ask::PrintFromMe() {
@@ -156,136 +161,35 @@ int Ask::SearchId(int id, vector<t1> t) {
         return -1;
 }
 
-
-
-
-
-
-
-
-
-// Users
-User::User():id(0), AllowAnonymous(true) {}
-
-void User::AddQuestionFromMe(Question q) {
-    QFrom.emplace_back(q);
-}
-void User::AddQuestionToMe(Question q) {
-    QTo.emplace_back(q);
-}
-
-bool User::IsEqual(string name, string Password) {
-    return name==GetName() and Password==GetPassword();
-}
-
-void User::Enter() {
-    cout<<"Enter User Name (No Spaces) :";
-    cin>>username;
-    cout<<"Enter Password :";
-    cin>>password;
-    cout<<"Enter Name :";
-    cin>>name;
-    cout<<"Enter email :";
-    cin>>email;
-    cout<<"Allow Anonymous Questions [1 or 0] :";
-    cin>>AllowAnonymous;
-}
-
-string User::GetName() {
-    return name;
-}
-
-string User::GetPassword() {
-    return password;
-}
-
-string User::GetEmail() {
-    return email;
-}
-
-string User::GetUsername() {
-    return username;
-}
-
-int User::GetId() {
-    return id;
-}
-
-bool User::GetAnonymous() {
-    return AllowAnonymous;
-}
-
-void User::Print() {
-        cout<<"ID: "<<GetId()<<"         Name: "<<GetName()<<el;
-}
-
-void User::PrintQuestionsFromMe() {
-    for(auto i:QFrom)
-        i.Print();
-
-}
-
-void User::PrintQuestionsToMe() {
-        for(auto i:QTo)
-            i.Print();
-}
-
-void Question::SetAnswer() {
-    if(GetAnswer().size()!=0)
-        cout<<"Warning : Alread Answered, answer will be updated\n";
-    cout<<"Enter Answer Text :";
-    getline(cin, Answer);
-
-}
-
-pair<int, int> Question::GetFromToId() {
-    return make_pair(FromId, ToId);
-}
-
-void Question::Enter(int From, int To) {
-        cout<<"Enter Question Text: ";
-         getline(cin, text);
-         FromId=From, ToId=To;
-
-
-}
-
-void Question::PrintQuestion() {
-    int From=GetFromToId().first;
-    string Ft;
-    if(From==-1)Ft=")  !AQ";
-    else        Ft=")  From User ("+ to_string(From)+")";
-
-    cout<<"Question Id ("<<GetId()<<Ft<<
-        " To User("<<GetFromToId().second<<") :    "
-        <<GetText()<<el;
-    cout<<" Answer: "<<GetAnswer()<<el;
-}
-void Question::Print(){
-    PrintQuestion();
-    for(auto i:Threads) {
-        cout<<"Thread :      ";
-        i.PrintQuestion();
+vector<string> ReadFile(string file){
+    ifstream fin(file);
+    fstream Details(file.c_str());
+    vector<string> Lines;
+    if(Details.fail()){
+        cout<<"\nError : Can't Open File\n";
+        return Lines;
     }
+    string line;
+    while(getline(Details, line)){
+        while(line.size()==0)
+            continue;
+        Lines.emplace_back(line);
+    }
+    Details.close();
+    return Lines;
+
 }
 
-string Question::GetText() {
-    return text;
+vector<string> Split(string line, string Delimeter) {
+    vector<string> Details;
+    int pos=0;
+    line+=Delimeter;
+    while((pos=line.find(Delimeter))!=-1){
+        string tmp=line.substr(0, pos);
+        line.erase(0, pos+(int)Delimeter.size());
+        Details.emplace_back(tmp);
+    }
+    return Details;
 }
-
-int Question::GetId() {
-    return id;
-}
-
-string Question::GetAnswer() {
-    return Answer;
-}
-
-void Question::AddThread(Question &Q) {
-    Threads.emplace_back(Q);
-}
-
-Question::Question()
-    :id(0),FromId(-1),ToId(-1), Answer("Not Answered Yet") {}
 
 

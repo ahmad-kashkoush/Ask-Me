@@ -61,6 +61,18 @@ build CMakeFiles/Ask_Me.dir/AskMe.cpp.o: CXX_COMPILER__Ask_Me_Debug /mnt/D/D/Tec
   OBJECT_DIR = CMakeFiles/Ask_Me.dir
   OBJECT_FILE_DIR = CMakeFiles/Ask_Me.dir
 
+build CMakeFiles/Ask_Me.dir/QuestionsManager.cpp.o: CXX_COMPILER__Ask_Me_Debug /mnt/D/D/Technical$ Learning/CPPPractise$ Folder/OOP$ Projects$ MS/Ask-Me/QuestionsManager.cpp || cmake_object_order_depends_target_Ask_Me
+  DEP_FILE = CMakeFiles/Ask_Me.dir/QuestionsManager.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Ask_Me.dir
+  OBJECT_FILE_DIR = CMakeFiles/Ask_Me.dir
+
+build CMakeFiles/Ask_Me.dir/UsersManager.cpp.o: CXX_COMPILER__Ask_Me_Debug /mnt/D/D/Technical$ Learning/CPPPractise$ Folder/OOP$ Projects$ MS/Ask-Me/UsersManager.cpp || cmake_object_order_depends_target_Ask_Me
+  DEP_FILE = CMakeFiles/Ask_Me.dir/UsersManager.cpp.o.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles/Ask_Me.dir
+  OBJECT_FILE_DIR = CMakeFiles/Ask_Me.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Ask_Me
@@ -69,7 +81,7 @@ build CMakeFiles/Ask_Me.dir/AskMe.cpp.o: CXX_COMPILER__Ask_Me_Debug /mnt/D/D/Tec
 #############################################
 # Link the executable Ask_Me
 
-build Ask_Me: CXX_EXECUTABLE_LINKER__Ask_Me_Debug CMakeFiles/Ask_Me.dir/main.cpp.o CMakeFiles/Ask_Me.dir/AskMe.cpp.o
+build Ask_Me: CXX_EXECUTABLE_LINKER__Ask_Me_Debug CMakeFiles/Ask_Me.dir/main.cpp.o CMakeFiles/Ask_Me.dir/AskMe.cpp.o CMakeFiles/Ask_Me.dir/QuestionsManager.cpp.o CMakeFiles/Ask_Me.dir/UsersManager.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/Ask_Me.dir
   POST_BUILD = :
