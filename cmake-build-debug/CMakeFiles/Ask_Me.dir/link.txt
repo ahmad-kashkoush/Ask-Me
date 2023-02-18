@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/Ask_Me.dir/main.cpp.o CMakeFiles/Ask_Me.dir/AskMe.cpp.o CMakeFiles/Ask_Me.dir/QuestionsManager.cpp.o CMakeFiles/Ask_Me.dir/UsersManager.cpp.o -o Ask_Me 

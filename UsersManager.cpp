@@ -1,15 +1,9 @@
 #include "AskMe.h"
 User::User():id(-1), AllowAnonymous(true) {}
 
-void User::AddQuestionFromMe(Question q) {
-    QFrom.emplace_back(q);
-}
-void User::AddQuestionToMe(Question q) {
-    QTo.emplace_back(q);
-}
 
-bool User::IsEqual(string name, string Password) {
-    return name==GetName() and Password==GetPassword();
+bool User::IsEqual(const string &Name, const string &Password) const {
+    return Name==GetName() and Password==GetPassword();
 }
 
 void User::Enter() {
@@ -27,46 +21,44 @@ void User::Enter() {
     cin>>AllowAnonymous;
 }
 
-string User::GetName() {
+const string &User::GetName()const  {
     return name;
 }
 
-string User::GetPassword() {
+const string &User::GetPassword() const {
     return password;
 }
 
-string User::GetEmail() {
+const string & User::GetEmail()const {
     return email;
 }
 
-string User::GetUsername() {
+const string & User::GetUsername()const {
     return username;
 }
 
-int User::GetId() {
+int User::GetId()const {
     return id;
 }
 
-bool User::GetAnonymous() {
+bool User::GetAnonymous()const {
     return AllowAnonymous;
 }
+const vector<int> &User::GetQuestionsIdFromMe() const {
+    return QIdFrom;
+}
 
-void User::Print() {
+const map<int, vector<int>> &User::GetIdToThread() const {
+    return ToQuestionThreads;
+}
+
+void User::Print() const{
     cout<<"ID: "<<GetId()<<"         Name: "<<GetName()<<el;
 }
 
-void User::PrintQuestionsFromMe() {
-    for(auto i:QFrom)
-        i.Print();
 
-}
 
-void User::PrintQuestionsToMe() {
-    for(auto i:QTo)
-        i.Print();
-}
-
-User::User(string Line) {
+User::User(const string &Line) {
         vector<string> v=Split(Line, string(","));
         id=stoi(v[0]);
         username=v[1];
@@ -76,10 +68,24 @@ User::User(string Line) {
         AllowAnonymous=stoi(v[5]);
 }
 
-string User::ToString() {
+const string &User::ToString() const{
     ostringstream oss;
     oss <<GetId()
         <<","<<GetUsername()<<","<<GetName()<<", "<<GetPassword()
         <<GetEmail()<<GetAnonymous();
     return oss.str();
 }
+
+void User::ResetQuestionsFromMe(const vector<int> &NewFrom) {
+            QIdFrom.clear();
+            for(auto idd:NewFrom)
+                QIdFrom.emplace_back(idd);
+}
+
+void User::ResetQuestionsToMe(const vector<pair<int, int>> &NewTo) {
+        // in pair we have<parentId, Thread>
+        ToQuestionThreads.clear();
+        for(auto &[ParentId, ThreadId]:NewTo)
+            ToQuestionThreads[ParentId].emplace_back(ThreadId);
+}
+
