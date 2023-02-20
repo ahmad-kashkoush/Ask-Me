@@ -6,11 +6,9 @@ bool User::IsEqual(const string &Name, const string &Password) const {
     return Name==GetName() and Password==GetPassword();
 }
 
-void User::Enter() {
-    cout<<"Enter Id (not negative) :";
-    cin>>id;
-    cout<<"Enter User Name (No Spaces) :";
-    cin>>username;
+void User::Enter(const string&usrName, int usrId) {
+    SetId(usrId);
+    SetUsername(usrName);
     cout<<"Enter Password :";
     cin>>password;
     cout<<"Enter Name :";
@@ -35,6 +33,24 @@ const string & User::GetEmail()const {
 
 const string & User::GetUsername()const {
     return username;
+}
+void User::SetName(const string &a){
+    name=a;
+}
+void User::SetPassword(const string &a){
+    password=a ;
+}
+void User::SetEmail(const string &a){
+                email=a;
+}
+void User::SetUsername(const string &a){
+    username=a;
+}
+void User:: SetId(int a ){
+        id=a;
+}
+void User::SetAnonymous(bool a){
+    AllowAnonymous=a;
 }
 
 int User::GetId()const {
@@ -89,3 +105,84 @@ void User::ResetQuestionsToMe(const vector<pair<int, int>> &NewTo) {
             ToQuestionThreads[ParentId].emplace_back(ThreadId);
 }
 
+
+
+void UsersManager::AccessSystem(){
+    int choice= ShowMenu({"Login", "SignUp"});
+    if(choice==1)
+        Login();
+    else
+        SignUp();
+}
+
+void UsersManager::Login() {
+    LoadDatabase();
+    while(1) {
+        cout << "Enter User Name and Password ";
+        string name, password;
+        cin >> name >> password;
+        
+    }
+
+}
+
+void UsersManager::LoadDatabase() {
+         NameToUserObject.clear();
+         vector<string> Lines= ReadFile("users.txt");
+         for(auto &Line:Lines){
+             User tmp=User(Line);
+             NameToUserObject[tmp.GetUsername()]=tmp;
+             Last=max(Last, tmp.GetId());
+         }
+         
+}
+
+void UsersManager::SignUp() {
+    string username;
+   cout<<"Enter User Name (no spaces): ";
+   cin>>username;
+   if(NameToUserObject.count(username)){
+       cout<<"username exist... try again\n";
+       SignUp();
+   }
+
+   cur.Enter(username, ++Last);
+   NameToUserObject[cur.GetUsername()]=cur;
+   UpdateDatabase(cur);
+}
+
+void UsersManager::UpdateDatabase(const User &usr) const{
+    string line=usr.ToString();
+    vector<string> v(1);
+    v[0]=line;
+    WriteFileLines("users.txt", v, true);
+}
+
+void UsersManager::ListNamesIds() const{
+        for(auto [UserName, Usr]:NameToUserObject)
+            cout<<"ID: "<<Usr.GetId()<<"\tName: "<<Usr.GetName()<<el;
+
+}
+
+void UsersManager::ResetQuestionsFromMe(const vector<int> &FromMe) {
+    cur.ResetQuestionsFromMe(FromMe);
+}
+
+void UsersManager::ResetQuestionsToMe(const vector<pair<int, int>> &ToMe) {
+    cur.ResetQuestionsToMe(ToMe);
+}
+
+pair<int, int> UsersManager::ReadUserId()const {
+
+    cout << "Enter User Id or -1 to canel\n";
+    int id;
+    cin >> id;
+    if (id == -1)
+        return make_pair(-1, -1);
+    for (auto &[UserName, usr]: NameToUserObject) {
+        if (usr.GetId() == id)
+            return make_pair(id, usr.GetAnonymous());
+    }
+    cout << "Invalid User Id ... Try Again\n";
+    return ReadUserId();
+}

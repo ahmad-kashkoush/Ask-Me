@@ -10,6 +10,9 @@ typedef long long ll;
 using namespace std;
 vector<string> ReadFile(string);
 vector<string> Split(string, string);
+void WriteFileLines(const string &, const vector<string> &, bool);
+int MenuSides(int , int);
+int ShowMenu(const vector<string> &);
 /*
  * Question->[id, text, Answer, From, to, parent_id]
  * */
@@ -61,7 +64,7 @@ public:
     bool IsEqual(const string&, const string&) const;
     void Print()const;
     const string &ToString()const;
-    void Enter();
+    void Enter(const string &, int);
     void ResetQuestionsFromMe(const vector<int> &);
     void ResetQuestionsToMe(const vector<pair<int, int>> &);
     /*Getters*/
@@ -69,21 +72,37 @@ public:
    const string& GetPassword()const;
    const string& GetEmail()const;
    const string& GetUsername()const;
-    int  GetId()const;
-    bool GetAnonymous()const;
-    const vector<int> & GetQuestionsIdFromMe()const;
-    const map<int, vector<int>> & GetIdToThread()const;
+   bool GetAnonymous()const ;
+   int  GetId()const;
+   const vector<int> & GetQuestionsIdFromMe()const;
+   const map<int, vector<int>> & GetIdToThread()const;
+   void SetName(const string &);
+   void SetPassword(const string &);
+   void SetEmail(const string &);
+   void SetUsername(const string &);
+   void  SetId(int );
+   void SetAnonymous(bool);
+};
+class UsersManager{
+private:
+    User cur;
+    int Last;
+    map<string, User> NameToUserObject;
+    
+public:
+    UsersManager():Last(0){};
+    void LoadDatabase();
+    void Login();
+    void SignUp();
+    void AccessSystem();
+    void UpdateDatabase(const User &)const;
+    void ListNamesIds()const;
+    void ResetQuestionsFromMe(const vector<int> &);
+    void ResetQuestionsToMe(const vector<pair<int, int>> &);
+    pair<int, int> ReadUserId()const;
+
 };
 class QuestionsManager{
-    /*Job
-     * 1. Upload Questions From Questions.txt
-     * 2. Write New Questions On Questions.txt
-     * 3. Print Questions*/
-private:
-    map<int, vector<Question>> Questions;
-public:
-    QuestionsManager();
-    void Print();
 
 };
 class Ask{
@@ -91,9 +110,10 @@ private:
     User usr;
     vector<User> Users;
     vector<Question> Questions;
-    void Menu(int);
-    int Login();
-    void SignUp();
+    UsersManager    UU;
+    const vector<string> &Menu() const;
+
+
     void AskQuestion();//Done
     template<typename t1>
     int SearchId(int id, vector<t1>);
@@ -106,7 +126,6 @@ private:
 public:
     Ask();
     void Run();
-
 };
 #endif //ASK_ME_ASKME_H
 /*

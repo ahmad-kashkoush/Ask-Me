@@ -1,30 +1,23 @@
 //
 // Created by ahmed-kashkoush on 2/14/23.
 //
-
 #include "AskMe.h"
 Ask::Ask() {
     Questions=ReadFile("questions.txt");
     Users=ReadFile("users.txt");
 }
 
-void Ask::Menu(int i) {// i==1?MenuLogin:MenuOfQuestions
-    cout<<"Menu : \n";
-    if(i==1){
-        cout<<"          1.Login\n"
-            <<"          2.Sign Up\n\n";
-
-    }else{
-        cout<<"          1.Print Questions To Me\n"
-            <<"          2.Print Questions From Me\n"
-            <<"          3.Answer Questions\n"
-            <<"          4.Delete Questions\n"
-            <<"          5.Ask Questions\n"
-            <<"          6.List System Users\n"
-            <<"          7.Feed\n"
-            <<"          8.Logout\n\n";
-
-    }
+const vector<string> &Ask::Menu()const {// i==1?MenuLogin:MenuOfQuestions
+    vector<string> Men;
+     Men.emplace_back("Print Questions To Me");
+     Men.emplace_back("Print Questions From Me");
+     Men.emplace_back("Answer Questions");
+     Men.emplace_back("Delete Questions");
+     Men.emplace_back("Ask Questions");
+     Men.emplace_back("List System Users");
+     Men.emplace_back("Feed");
+     Men.emplace_back("Logout");
+     return Men;
 }
 
 void Ask::Run() {
@@ -93,32 +86,8 @@ void Ask::AskQuestion() {
 
 }
 
-int Ask::Login() {
-    cout<<"Enter User Name and Password ";
-    string name, password;
-    cin>>name>>password;
-    for(int i=0;i<Users.size();i++){
-        if(Users[i].IsEqual(name, password)){
-            usr=Users[i];
-            return 0;
-        }
-    }
-    cout<<"Invalid User name and password ... Please Try Again\n";
-    return -1;
-}
 
-void Ask::PrintFromMe() {
-    usr.PrintQuestionsFromMe();
-}
 
-void Ask::PrintToMe() {
-    usr.PrintQuestionsToMe();
-}
-
-void Ask::SignUp() {
-        usr.Enter();
-        Users.emplace_back(usr);
-}
 
 void Ask::AnswerQuestion() {
         cout<<"Enter Question id or -1 to cancel: ";
@@ -159,37 +128,6 @@ int Ask::SearchId(int id, vector<t1> t) {
                 return i;
         }
         return -1;
-}
-
-vector<string> ReadFile(string file){
-    ifstream fin(file);
-    fstream Details(file.c_str());
-    vector<string> Lines;
-    if(Details.fail()){
-        cout<<"\nError : Can't Open File\n";
-        return Lines;
-    }
-    string line;
-    while(getline(Details, line)){
-        while(line.size()==0)
-            continue;
-        Lines.emplace_back(line);
-    }
-    Details.close();
-    return Lines;
-
-}
-
-vector<string> Split(string line, string Delimeter) {
-    vector<string> Details;
-    int pos=0;
-    line+=Delimeter;
-    while((pos=line.find(Delimeter))!=-1){
-        string tmp=line.substr(0, pos);
-        line.erase(0, pos+(int)Delimeter.size());
-        Details.emplace_back(tmp);
-    }
-    return Details;
 }
 
 
