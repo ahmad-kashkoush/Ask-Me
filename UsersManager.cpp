@@ -3,7 +3,7 @@ User::User():id(-1), AllowAnonymous(true) {}
 
 
 bool User::IsEqual(const string &Name, const string &Password) const {
-    return Name==GetName() and Password==GetPassword();
+    return Name==GetUsername() and Password==GetPassword();
 }
 
 void User::Enter(const string&usrName, int usrId) {
@@ -76,19 +76,21 @@ void User::Print() const{
 
 User::User(const string &Line) {
         vector<string> v=Split(Line, string(","));
-        id=stoi(v[0]);
-        username=v[1];
-        password=v[2];
-        name=v[3];
-        email=v[4];
-        AllowAnonymous=stoi(v[5]);
+        if(!Line.empty()) {
+            id = stoi(v[0]);
+            username = v[1];
+            password = v[2];
+            name = v[3];
+            email = v[4];
+            AllowAnonymous = stoi(v[5]);
+        }
 }
 
-const string &User::ToString() const{
+  string User::ToString() const {
     ostringstream oss;
     oss <<GetId()
-        <<","<<GetUsername()<<","<<GetName()<<", "<<GetPassword()
-        <<GetEmail()<<GetAnonymous();
+        <<","<<GetUsername()<<","<<GetPassword()<<","<<GetName()<<","
+        <<GetEmail()<<","<<GetAnonymous();
     return oss.str();
 }
 
@@ -105,6 +107,18 @@ void User::ResetQuestionsToMe(const vector<pair<int, int>> &NewTo) {
             ToQuestionThreads[ParentId].emplace_back(ThreadId);
 }
 
+void User::ClearQuestions() {
+    QIdFrom.clear();
+    ToQuestionThreads.clear();
+}
+
+void User::AddToQuestionToMe(int qParentId, int qId) {
+    ToQuestionThreads[qParentId].emplace_back(qId);
+}
+
+void User::AddToQuestionsFromMe(int qId) {
+    QIdFrom.emplace_back(qId);
+}
 
 
 void UsersManager::AccessSystem(){
@@ -113,23 +127,38 @@ void UsersManager::AccessSystem(){
         Login();
     else
         SignUp();
+    QuestionsManager q;
+    q.FillUserQuestion(cur);
 }
 
 void UsersManager::Login() {
     LoadDatabase();
     while(1) {
-        cout << "Enter User Name and Password ";
+        cout << "Enter User Name and Password: ";
         string name, password;
         cin >> name >> password;
-        
+        if(!NameToUserObject.count(name))
+            cout<<"Wrong Password or name...Try Again\n";
+        else{
+            cur=NameToUserObject[name];
+            if(!cur.IsEqual(name, password))
+                cout<<"Wrong Password or name...Try Again\n";
+            else
+                break;
+
+
+
+        }
+
     }
 
 }
 
 void UsersManager::LoadDatabase() {
          NameToUserObject.clear();
-         vector<string> Lines= ReadFile("users.txt");
+         vector<string> Lines= ReadFile("../users.txt");
          for(auto &Line:Lines){
+             if(Line.empty())continue;
              User tmp=User(Line);
              NameToUserObject[tmp.GetUsername()]=tmp;
              Last=max(Last, tmp.GetId());
@@ -152,10 +181,10 @@ void UsersManager::SignUp() {
 }
 
 void UsersManager::UpdateDatabase(const User &usr) const{
-    string line=usr.ToString();
-    vector<string> v(1);
-    v[0]=line;
-    WriteFileLines("users.txt", v, true);
+    string line= usr.ToString();
+    vector<string> v;
+    v.emplace_back(line);
+    WriteFileLines("../users.txt", v);
 }
 
 void UsersManager::ListNamesIds() const{
@@ -174,7 +203,7 @@ void UsersManager::ResetQuestionsToMe(const vector<pair<int, int>> &ToMe) {
 
 pair<int, int> UsersManager::ReadUserId()const {
 
-    cout << "Enter User Id or -1 to canel\n";
+    cout << "Enter User Id or -1 to cancel\n";
     int id;
     cin >> id;
     if (id == -1)
@@ -186,3 +215,8 @@ pair<int, int> UsersManager::ReadUserId()const {
     cout << "Invalid User Id ... Try Again\n";
     return ReadUserId();
 }
+
+User UsersManager::GetCurrentUser() {
+    return cur;
+}
+

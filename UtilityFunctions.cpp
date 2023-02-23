@@ -14,7 +14,7 @@ vector<string> ReadFile(string file){
     string line;
     while(getline(Details, line)){
         while(line.size()==0)
-            continue;
+           break;
         Lines.emplace_back(line);
     }
     Details.close();
@@ -33,7 +33,7 @@ vector<string> Split(string line, string Delimeter) {
     }
     return Details;
 }
-void WriteFileLines(const string &path, const vector<string> &lines, bool append = true){
+void WriteFileLines(const string &path, const vector<string> &lines, bool append ){
     auto status = ios::in | ios::out | ios::app;
 
     if (!append)
@@ -67,4 +67,9 @@ int ShowMenu(const vector<string> &v){
     for(int choice=1;choice<=v.size();choice++)
         cout<<choice<<": "<<v[choice-1]<<el;
     return MenuSides(1, (int)v.size());
+}
+int ToInt(const string &str){
+    istringstream N(str);
+    int num;N>>num;
+    return num;
 }

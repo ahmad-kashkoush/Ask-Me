@@ -1,3 +1,0 @@
-/mnt/D/D/Technical Learning/CPPPractise Folder/OOP Projects MS/Ask-Me/cmake-build-debug/CMakeFiles/Ask_Me.dir
-/mnt/D/D/Technical Learning/CPPPractise Folder/OOP Projects MS/Ask-Me/cmake-build-debug/CMakeFiles/edit_cache.dir
-/mnt/D/D/Technical Learning/CPPPractise Folder/OOP Projects MS/Ask-Me/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -7,15 +7,16 @@
 #include<bits/stdc++.h>
 typedef long long ll;
 #define el "\n"
+#define stoi   ToInt
 using namespace std;
 vector<string> ReadFile(string);
 vector<string> Split(string, string);
-void WriteFileLines(const string &, const vector<string> &, bool);
+void WriteFileLines(const string &, const vector<string> &, bool append=true);
 int MenuSides(int , int);
 int ShowMenu(const vector<string> &);
-/*
- * Question->[id, text, Answer, From, to, parent_id]
- * */
+int ToInt(const string &);
+
+
 class Question{
 private:
 
@@ -34,22 +35,25 @@ public:
     void PrintFrom() const;
     void PrintFeedQuestion();
     void Enter(int ,int);
-   const string &ToString()const;
+   string ToString() const;
     //Getters
     const string &GetText()const;
     const string &GetAnswer()const;
-    const int &GetId()const;
+    bool GetAnynomous()const;
+    int GetId()const;
     int GetParentId()const;
-    pair<int, int> &GetFromToId()const;
+    pair<int, int> GetFromToId()const;
     //Setters
     void SetText(const string&);
-    void SetAnswer();
+    void SetAnswer(const string &);
     void SetId(int);
     void SetParentId(int);
     void SetFromToId(int ,int);
+    void SetAnynomous(int );
 
 
 };
+class QuestionManager;
 class User{
 private:
     string name, password, email, username;
@@ -63,10 +67,13 @@ public:
     User();
     bool IsEqual(const string&, const string&) const;
     void Print()const;
-    const string &ToString()const;
+    string ToString() const;
     void Enter(const string &, int);
     void ResetQuestionsFromMe(const vector<int> &);
     void ResetQuestionsToMe(const vector<pair<int, int>> &);
+    void ClearQuestions();
+    void AddToQuestionsFromMe(int);
+    void AddToQuestionToMe(int ,int);
     /*Getters*/
    const string& GetName()const;
    const string& GetPassword()const;
@@ -100,31 +107,42 @@ public:
     void ResetQuestionsFromMe(const vector<int> &);
     void ResetQuestionsToMe(const vector<pair<int, int>> &);
     pair<int, int> ReadUserId()const;
+    //Getters
+     User GetCurrentUser();
+
 
 };
 class QuestionsManager{
+private:
+    int last;
+    map<int, vector<int>> QIdToThreads;
+    map<int, Question> IdToQuestion;
+public:
+    QuestionsManager();
+    void LoadDatabase();
+    void FillUserQuestion( User&);
+    void PrintToQuestions(const User &)const;
+    void PrintFromQuestion(const User &)const;
+    int ReadQuestionIdAny(const User &)const;
+    int ReadQuestionIdThread(const User &)const;
+    void UpdateDatabase();
+    void AnswerQuestion(const User &);
+    void DeleteQuestion(const User &);
+    void AskQuestion(const User &, pair<int, int>);
+    void ListFeeds();
+    // Getters
+    vector<int> GetToUserQuestion(const User &);
+    vector<pair<int, int>> GetFromUserQuestion(const User &);//Get Question From this user
 
 };
 class Ask{
 private:
-    User usr;
-    vector<User> Users;
-    vector<Question> Questions;
     UsersManager    UU;
-    const vector<string> &Menu() const;
+    QuestionsManager QQ;
 
-
-    void AskQuestion();//Done
-    template<typename t1>
-    int SearchId(int id, vector<t1>);
-    void PrintFromMe();
-    void PrintToMe();
-    void AnswerQuestion();
-    void DeleteQuestion();
-    void  ListUsers();
-    void Feed();
 public:
     Ask();
+    void LoadDatabase(bool FillUser=true);
     void Run();
 };
 #endif //ASK_ME_ASKME_H
