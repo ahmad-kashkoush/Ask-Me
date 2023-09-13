@@ -1,0 +1,8 @@
+# ninja log v5
+0	1932	1694597530531746786	CMakeFiles/Ask_Me.dir/sourchCodeFiles/QuestionsManager.cpp.o	5f21aa70045f35dd
+0	19	1694597553708615427	build.ninja	67c63a21ae042da4
+1	1571	1694597511311055335	CMakeFiles/Ask_Me.dir/sourchCodeFiles/AskMe.cpp.o	66793466f9613975
+1	1879	1694597530479744876	CMakeFiles/Ask_Me.dir/sourchCodeFiles/UsersManager.cpp.o	baedd84c1ae6da5c
+0	1562	1694597255721817727	CMakeFiles/Ask_Me.dir/main.cpp.o	4359045c17a25ac0
+1	1480	1694597556032704182	CMakeFiles/Ask_Me.dir/sourchCodeFiles/UtilityFunctions.cpp.o	1b9f00ada0cf80d
+1480	1562	1694597556112707244	Ask_Me	aea97da9cf90c007
