@@ -47,19 +47,19 @@
 ## Demo
 
 - Sign up
-	![](Pasted%20image%2020230913134848.png)
+	![](Image%20Bank/Pasted%20image%2020230913134848.png)
 - Login 
-	![](Pasted%20image%2020230913135028.png)
+	![](Image%20Bank/Pasted%20image%2020230913135028.png)
 - Print Questions From Me
-	![](Pasted%20image%2020230913135216.png)
+	![](Image%20Bank/Pasted%20image%2020230913135216.png)
 - Print Questions To Me
-	![](Pasted%20image%2020230913135310.png)
+	![](Image%20Bank/Pasted%20image%2020230913135310.png)
 - Answer a Question
-	![](Pasted%20image%2020230913135527.png)
+	![](Image%20Bank/Pasted%20image%2020230913135527.png)
 - Ask A question
-	![](Pasted%20image%2020230913135757.png)
+	![](Image%20Bank/Pasted%20image%2020230913135757.png)
 - List System User
-	![](Pasted%20image%2020230913140023.png)
+	![](Image%20Bank/Pasted%20image%2020230913140023.png)
 - Feed 
-	![](Pasted%20image%2020230913140059.png)
+	![](Image%20Bank/Pasted%20image%2020230913140059.png)
 	
