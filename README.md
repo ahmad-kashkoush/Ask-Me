@@ -12,24 +12,21 @@
 	- I used this function every time I need to update the UI
 - I created a utility file which has repeated tasks and used it everywhere else
 
-## How to Set UP
-```
-git clone git@github.com:ahmad-kashkoush/Ask-Me.git
-```
+## How to Set Up
+- Clone the Project
 - Open the project as cmake Project either on vs code or clion
 - Use Data Below as test data 
 - Enjoy ...
-#### initial User Data
+
+### Use Below data to test
+####  Use initial User Data
 
 | Id  | UserName | Password | Name                 | Email              | Allow Anynomous |
 | --- | -------- | -------- | -------------------- | ------------------ | --------------- |
 | 13  | mostafa  | 111      | mostafa_saad_ibrahim | mostafa@gmail.com  | 1               |
 | 11  | noha     | 222      | noha_salah           | nono171@gmail.com  | 0               |
-| 45  | ali      | 333      | ali_wael             | wael@gmail.com     | 0               |
-| 46  | Ahmed    | 123      | Kashkoush            | kashkoush@kash.com | 0               |
-| 47  | Brad     | 555      | Brad_Max             | Brad@Brad.com      | 1               |
 
-#### Initial Question data
+#### Initial Question data, to answer questions
 
 | Question Id | Parent Id | From User Id | To User Id | Is Anynomous? | Text | Answer |
 | ----------- | --------- | ------------ | ---------- | ------------- | ---- | ------ |
